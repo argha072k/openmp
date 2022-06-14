@@ -38,7 +38,7 @@ void printans(int dist[], int n,double t1,double t2)
 }
 
  
-void BellmanFord(int graph[][3] ,int V,int E, int src)
+void BellmanFord(struct Graph* graph ,int V,int E, int src)
 {
 	
 	int dist[V];
