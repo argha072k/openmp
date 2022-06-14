@@ -147,8 +147,8 @@ int main(int argc,char *argv[])
  
     // Making of new matrix
     int k = 0;
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 5; j++)
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 3; j++)
             if (graph[i][j] != 0)
             {
                 compactMatrix[0][k] = i;
