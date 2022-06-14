@@ -130,47 +130,41 @@ int main(int argc,char *argv[])
 { 
     int V = 5; // Number of vertices in graph
     int E = 8; // Number of edges in graph
-    struct Graph* graph = createGraph(V, E);
+    
+    int graph[][3] = { { 0, 1, 6 }, { 0, 2, 7 },{ 1, 3, 5 }, { 1, 4, -4 },{ 1, 2, 8 }, {2, 3, -3},{ 2, 4, 9 }, { 3, 1, -2 },{ 4, 0, 2 }, { 4, 3, 7 }};
+	
+	int size = 0;
+	
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 5; j++)
+            if (graph[i][j] != 0)
+                size++;
  
-    // add edge 0-1 (or A-B in above figure)
-    graph->edge[0].src = 0;
-    graph->edge[0].dest = 1;
-    graph->edge[0].weight = -1;
+    // number of columns in compactMatrix (size) must be
+    // equal to number of non - zero elements in
+    // graph
+    int compactMatrix[3][size];
  
-    // add edge 0-2 (or A-C in above figure)
-    graph->edge[1].src = 0;
-    graph->edge[1].dest = 2;
-    graph->edge[1].weight = 4;
+    // Making of new matrix
+    int k = 0;
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 3; j++)
+            if (graph[i][j] != 0)
+            {
+                compactMatrix[0][k] = i;
+                compactMatrix[1][k] = j;
+                compactMatrix[2][k] = graph[i][j];
+                k++;
+            }
  
-    // add edge 1-2 (or B-C in above figure)
-    graph->edge[2].src = 1;
-    graph->edge[2].dest = 2;
-    graph->edge[2].weight = 3;
+    for (int i=0; i<3; i++)
+    {
+        for (int j=0; j<size; j++)
+            printf("%d ", compactMatrix[i][j]);
  
-    // add edge 1-3 (or B-D in above figure)
-    graph->edge[3].src = 1;
-    graph->edge[3].dest = 3;
-    graph->edge[3].weight = 2;
+        printf("\n");
  
-    // add edge 1-4 (or B-E in above figure)
-    graph->edge[4].src = 1;
-    graph->edge[4].dest = 4;
-    graph->edge[4].weight = 2;
- 
-    // add edge 3-2 (or D-C in above figure)
-    graph->edge[5].src = 3;
-    graph->edge[5].dest = 2;
-    graph->edge[5].weight = 5;
- 
-    // add edge 3-1 (or D-B in above figure)
-    graph->edge[6].src = 3;
-    graph->edge[6].dest = 1;
-    graph->edge[6].weight = 1;
- 
-    // add edge 4-3 (or E-D in above figure)
-    graph->edge[7].src = 4;
-    graph->edge[7].dest = 3;
-    graph->edge[7].weight = -3;
+    }
  
     BellmanFord(graph, V, E, 0);
 
