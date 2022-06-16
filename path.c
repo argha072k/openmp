@@ -122,7 +122,7 @@ void BellmanFord(int graph[][3] ,int V,int E, int src)
 	double t2=omp_get_wtime();
 
     #pragma omp single
-	printans(dist, V,t1,t2);
+	printans(dist,V,t1,t2);
 }
 }	
 
@@ -134,7 +134,7 @@ int main(int argc,char *argv[])
     
     int graph[][3] = { { 0, 1, 6 }, { 0, 2, 7 },{ 1, 3, 5 }, { 1, 4, -4 },{ 1, 2, 8 }, {2, 3, -3},{ 2, 4, 9 }, { 3, 1, -2 },{ 4, 0, 2 }, { 4, 3, 7 }};
 	
-    BellmanFord(graph, V, E, 0);
+    BellmanFord(graph,V, E, 0);
 
     return 0;
 }
