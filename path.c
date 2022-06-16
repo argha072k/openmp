@@ -77,10 +77,10 @@ void BellmanFord(int graph[][3] ,int V,int E, int src)
                 {
                 local_change[tid]=true;
 				dist[v] = dist[u] + wt;
-                }
-	
-			
+                }		
 		}
+		if(local_change[tid]==false)
+			break;
 	}
     #pragma omp barrier
     #pragma omp single
