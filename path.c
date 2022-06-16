@@ -42,9 +42,8 @@ void BellmanFord(int graph[][3] ,int V,int E, int src)
 {
 	
 	int dist[V];
-	int numt=omp_get_max_threads();
 	bool change;
-	bool local_change[numt];
+	bool local_change[8];
 	int k=0;
 
     double t1=omp_get_wtime();
@@ -84,7 +83,7 @@ void BellmanFord(int graph[][3] ,int V,int E, int src)
 	{
 		k++;
 		change=false;
-		for(int i=0;i<numt;i++)
+		for(int i=0;i<8;i++)
 		{
 			change = change | local_change[i];
 		}
