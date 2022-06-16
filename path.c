@@ -133,39 +133,6 @@ int main(int argc,char *argv[])
     
     int graph[][3] = { { 0, 1, 6 }, { 0, 2, 7 },{ 1, 3, 5 }, { 1, 4, -4 },{ 1, 2, 8 }, {2, 3, -3},{ 2, 4, 9 }, { 3, 1, -2 },{ 4, 0, 2 }, { 4, 3, 7 }};
 	
-	int size = 0;
-	
-    for (int i = 0; i < 4; i++)
-        for (int j = 0; j < 5; j++)
-            if (graph[i][j] != 0)
-                size++;
- 
-    // number of columns in compactMatrix (size) must be
-    // equal to number of non - zero elements in
-    // graph
-    int compactMatrix[3][size];
- 
-    // Making of new matrix
-    int k = 0;
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < 3; j++)
-            if (graph[i][j] != 0)
-            {
-                compactMatrix[0][k] = i;
-                compactMatrix[1][k] = j;
-                compactMatrix[2][k] = graph[i][j];
-                k++;
-            }
- 
-    for (int i=0; i<3; i++)
-    {
-        for (int j=0; j<size; j++)
-            printf("%d ", compactMatrix[i][j]);
- 
-        printf("\n");
- 
-    }
- 
     BellmanFord(graph, V, E, 0);
 
     return 0;
