@@ -45,6 +45,8 @@ void BellmanFord(int graph[][3] ,int V,int E, int src)
 	bool change;
 	bool local_change[8];
 	int k=0;
+	
+	omp_set_num_threads(8);
 
     double t1=omp_get_wtime();
 #pragma omp parallel 
@@ -128,7 +130,7 @@ void BellmanFord(int graph[][3] ,int V,int E, int src)
 int main(int argc,char *argv[])
 { 
     int V = 5; // Number of vertices in graph
-    int E = 8; // Number of edges in graph
+    int E = 10; // Number of edges in graph
     
     int graph[][3] = { { 0, 1, 6 }, { 0, 2, 7 },{ 1, 3, 5 }, { 1, 4, -4 },{ 1, 2, 8 }, {2, 3, -3},{ 2, 4, 9 }, { 3, 1, -2 },{ 4, 0, 2 }, { 4, 3, 7 }};
 	
