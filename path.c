@@ -31,7 +31,7 @@ void printans(int dist[], int n,double t1,double t2)
 {
 	printf("Vertex Distance from Source\n");
 	for (int i = 0; i < n; ++i)
-		printf("%d \t\t %d\n", i, dist[i]);
+		printf("%d \n",dist[i]);
     
     printf("total time taken is %g",t2-t1);    
 	
