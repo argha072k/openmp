@@ -42,9 +42,9 @@ void BellmanFord(int graph[][3] ,int V,int E, int src)
 {
 	
 	int dist[V];
-	int numt=omp_get_max_threads();
+	omp_set_num_threads(32);
 	bool change;
-	bool local_change[numt];
+	bool local_change[32];
 	int k=0;
 
     double t1=omp_get_wtime();
@@ -78,13 +78,16 @@ void BellmanFord(int graph[][3] ,int V,int E, int src)
 				dist[v] = dist[u] + wt;
                 }
 		}
+		
+		if(local_change[tid]==false)
+			break;
 	}
     #pragma omp barrier
     #pragma omp single
 	{
 		k++;
 		change=false;
-		for(int i=0;i<numt;i++)
+		for(int i=0;i<32;i++)
 		{
 			change = change | local_change[i];
 		}
