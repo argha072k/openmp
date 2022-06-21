@@ -41,86 +41,60 @@ void printans(int dist[], int n,double t1,double t2)
 void BellmanFord(int graph[][3] ,int V,int E, int src)
 {
 	
-	int dist[V];
-	omp_set_num_threads(32);
-	bool change;
-	bool local_change[32];
-	int k=0;
+int dist[V];
+bool change;
+omp_set_num_threads(8);
 
-    double t1=omp_get_wtime();
-#pragma omp parallel 
-{
-	
-	#pragma omp for
+double t1=omp_get_wtime();
+
+   #pragma omp for
 	for (int i = 0; i < V; i++)
 		dist[i] = INT_MAX;
 
 	dist[src] = 0;
 
-    #pragma omp barrier
-    
-    
-    int tid=omp_get_thread_num();
-	for (int i = 1; i <= V - 1; i++) 
-	{
 
-		local_change[tid]=false;
-        
+	for (int i = 1; i <= V - 1; i++) 
+	{      
+           change=false;
+
+#pragma omp parallel for default(none) shared(E,dist,graph,change)
 		for (int j = 0; j < E; j++)
 		{
 			int u = graph[j][0];
 			int v = graph[j][1];
 			int wt = graph[j][2];
+
 			if (dist[u] != INT_MAX
 				&& dist[u] + wt < dist[v])
-                {
-                local_change[tid]=true;
+            {
+            #pragma omp critical
+			{  
+				change=true;
 				dist[v] = dist[u] + wt;
-                }
+			}
+				
+            }			
 		}
-		
-		if(local_change[tid]==false)
-			break;
+		if(change==false)
+		break;
 	}
-    #pragma omp barrier
-    #pragma omp single
-	{
-		k++;
-		change=false;
-		for(int i=0;i<32;i++)
-		{
-			change = change | local_change[i];
-		}
-	}
-	       
 
 
-   if(k==V-1)
-   {
-        change=false;
-		for (int i = 0; i < E; i++)
+        #pragma omp single 
 		{
-			#pragma omp parallel for reduction (|:change)
-			for(int j=0;j<E;j++)
+        for(int j=0;j<E;j++)
 			{
-				int u = graph[i][0];
-		        int v = graph[i][1];
-		        int wt = graph[i][2];
+			int u = graph[j][0];
+		        int v = graph[j][1];
+		        int wt = graph[j][2];
 		        if (dist[u] != INT_MAX && dist[u] + wt < dist[v])
 				{
-					change=true;
+					printf("negative cycle is pres\n");
 				}
-			
 			}
-			
-		}
-        if(change)
-		{
-			printf("graph has negative cycle \n");
-		}
-   }
-	
-	
+		}	   
+				
 	double t2=omp_get_wtime();
 
     #pragma omp single
