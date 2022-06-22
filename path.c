@@ -47,7 +47,7 @@ omp_set_num_threads(8);
 
 double t1=omp_get_wtime();
 
-   #pragma omp for
+   #pragma omp parallel for
 	for (int i = 0; i < V; i++)
 		dist[i] = INT_MAX;
 
