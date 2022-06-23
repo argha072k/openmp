@@ -1,10 +1,13 @@
 //single src shortest path
 
 #include <stdio.h>
+#include <string.h>
 #include<limits.h>
 #include <stdlib.h>
 #include <omp.h>
 #include<stdbool.h>
+
+
 
 struct Edge {
 	int src, dest, weight;
@@ -42,7 +45,7 @@ void BellmanFord(int graph[][3] ,int V,int E, int src)
 {
 	
 int dist[V];
-bool change;
+bool change = true;
 omp_set_num_threads(8);
 
 double t1=omp_get_wtime();
@@ -54,32 +57,19 @@ double t1=omp_get_wtime();
 	dist[src] = 0;
 
 
-	for (int i = 1; i <= V - 1; i++) 
-	{      
-           change=false;
-
-#pragma omp parallel for default(none) shared(E,dist,graph,change)
-		for (int j = 0; j < E; j++)
-		{
+	while(change){    
+        change=false;
+		#pragma omp parallel for default(none) shared(E,dist,graph,change)
+		for (int j = 0; j < E; j++){
 			int u = graph[j][0];
 			int v = graph[j][1];
 			int wt = graph[j][2];
-			
-                     #pragma omp critical
-			{
-			if (dist[u] != INT_MAX
-				&& dist[u] + wt < dist[v])            
-        			{  
-				change=true;
-				dist[v] = dist[u] + wt;
-			        }
-			
-			}
-				
-            			
+
+				if (dist[u] != INT_MAX && dist[u] + wt < dist[v]){
+					dist[v] = dist[u] + wt;
+					change=true;
+				}		
 		}
-		if(change==false)
-		break;
 	}
 
 
@@ -87,7 +77,7 @@ double t1=omp_get_wtime();
 		{
         for(int j=0;j<E;j++)
 			{
-			int u = graph[j][0];
+				int u = graph[j][0];
 		        int v = graph[j][1];
 		        int wt = graph[j][2];
 		        if (dist[u] != INT_MAX && dist[u] + wt < dist[v])
@@ -97,33 +87,57 @@ double t1=omp_get_wtime();
 			}
 		}	   
 				
-	double t2=omp_get_wtime();
+double t2=omp_get_wtime();
 
     #pragma omp single
 	printans(dist, V,t1,t2);
 }
-	
+
 
 
 int main(int argc,char *argv[])
 { 
     int V = 5; // Number of vertices in graph
     int E = 10; // Number of edges in graph
-    
-    int graph[][3] = { { 0, 1, 6 }, { 0, 2, 7 },{ 1, 3, 5 }, { 1, 4, -4 },{ 1, 2, 8 }, {2, 3, -3},{ 2, 4, 9 }, { 3, 1, -2 },{ 4, 0, 2 }, { 4, 3, 7 }};
-	
+    int graph[E][3];
+
+     FILE* ptr;
+
+ 
+    // Opening file in reading mode
+    ptr = fopen("data", "r");
+ 
+    if (NULL == ptr) {
+        printf("file can't be opened \n");
+    }
+ 
+    printf("content of this file are \n");
+
+    char ch[50];
+
+    int i=0,j=0;
+
+   while( fgets (ch,10,ptr)!=NULL ) {
+
+        char * token = strtok(ch, " ");
+        while( token != NULL ) {
+            if(j==3)
+            {
+            j=0;
+            i++;
+            }
+          int t=atoi(token);
+            graph[i][j]=t;
+            j++;
+
+         token = strtok(NULL, " ");
+   }       }
+
+ 
+    // Closing the file
+    fclose(ptr);
 	
     BellmanFord(graph, V, E, 0);
 
     return 0;
 }
-
-/*
-Vertex Distance from Source
-0                0
-1                2
-2                7
-3                4
-4                -2
-total time taken is 0.00300002
-*/
