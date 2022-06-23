@@ -105,7 +105,7 @@ int main(int argc,char *argv[])
 
  
     // Opening file in reading mode
-    ptr = fopen("data", "r");
+    ptr = fopen("smallgraph.txt", "r");
  
     if (NULL == ptr) {
         printf("file can't be opened \n");
