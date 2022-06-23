@@ -1,14 +1,19 @@
+
 //single src shortest path
 
-#include <stdio.h>
+#include <iostream>
 #include <string.h>
-#include<limits.h>
-#include <stdlib.h>
-#include <omp.h>
-#include<stdbool.h>
+#include </opt/homebrew/Cellar/libomp/14.0.5/include/omp.h>
+#include <sstream>
+#include <fstream>
+#include <climits>
+#include <vector>
+#include <algorithm>
 
 
+using namespace std;
 
+/*
 struct Edge {
 	int src, dest, weight;
 };
@@ -28,7 +33,7 @@ struct Graph* createGraph(int V, int E)
 	graph->edge = (struct Edge *)malloc(graph->E * sizeof(struct Edge));
 	return graph;
 }
-
+*/
 
 void printans(int dist[], int n,double t1,double t2)
 {
@@ -97,47 +102,34 @@ double t2=omp_get_wtime();
 
 int main(int argc,char *argv[])
 { 
-    int V = 5; // Number of vertices in graph
-    int E = 10; // Number of edges in graph
+    int V = 1971259; // Number of vertices in graph
+    int E = 5533214; // Number of edges in graph
     int graph[E][3];
 
-     FILE* ptr;
+	ifstream infile;
+	infile.open("roadNet-CA.txt");
+	string line;
+	int i=0;
 
- 
-    // Opening file in reading mode
-    ptr = fopen("data", "r");
- 
-    if (NULL == ptr) {
-        printf("file can't be opened \n");
-    }
- 
-    printf("content of this file are \n");
+	while(getline(infile,line))
+	{
+		if(line.length()==0||line[0] < '0'||line[0]>'9'){
+			continue;
+		}
 
-    char ch[50];
+		stringstream ss(line);
 
-    int i=0,j=0;
+		ss>>graph[i][0];
+		ss>>graph[i][1];
+		graph[i][2]=3;
+		i++;
+		
+	}
 
-   while( fgets (ch,10,ptr)!=NULL ) {
 
-        char * token = strtok(ch, " ");
-        while( token != NULL ) {
-            if(j==3)
-            {
-            j=0;
-            i++;
-            }
-          int t=atoi(token);
-            graph[i][j]=t;
-            j++;
-
-         token = strtok(NULL, " ");
-   }       }
-
- 
-    // Closing the file
-    fclose(ptr);
-	
     BellmanFord(graph, V, E, 0);
 
     return 0;
 }
+
+
