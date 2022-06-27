@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string.h>
-#include </opt/homebrew/Cellar/libomp/14.0.5/include/omp.h>
+#include <omp.h>
 #include <sstream>
 #include <fstream>
 #include <climits>
@@ -13,11 +13,11 @@
 
 using namespace std;
 
-/*
+
 struct Edge {
 	int src, dest, weight;
 };
-
+/*
 struct Graph {
 	
 	int V, E;
