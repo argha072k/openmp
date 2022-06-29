@@ -107,7 +107,6 @@ double t1=omp_get_wtime();
 				
 double t2=omp_get_wtime();
 
-    #pragma omp single
 	printans(dist, V,t1,t2);
 }
 
